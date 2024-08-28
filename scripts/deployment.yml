@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: project-part2
+spec:
+  replicas: 1 
+  selector:
+    matchLabels: 
+      app: project-part2
+  template:
+    metadata:
+      labels: 
+        app: project-part2
+    spec:
+      containers:
+      - name: project-part2
+        image: video-streaming:2
+        imagePullPolicy: IfNotPresent 
+        ports: 
+        - containerPort: 8000 
+        env: 
+        - name: DATABASE_URL 
+          value: "postgresql://books:7FJGby58aJHfIlx1MoJLDrlCDVfSpnKv@dpg-cr5frlbv2p9s73agljsg-a.singapore-postgres.render.com/mydatabase_hrx1"
+
+---
+
+apiVersion: v1
+kind: Service 
+metadata:
+  name: project-part2-service 
+spec:
+  selector:
+    app: project-part2
+  type: NodePort
+  ports:
+  - port: 8000 
+    targetPort: 8000 
+    nodePort: 30385 
